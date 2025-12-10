@@ -1,0 +1,18 @@
+{
+  "lucifermorningstar74158@gmail.com": {
+    "name": "lucifer",
+    "pw_hash": "pbkdf2:sha256:260000$mcnBcLNm0AFx4fdy$7a2c98a0122d9827b7dd4cba6847ca434a702cf69bec1a8a6e8b8c949a4bbe4a"
+  },
+  "harsh@gmail.com": {
+    "name": "HARSH RAJ",
+    "pw_hash": "pbkdf2:sha256:260000$S5FSiKrKjtPDlY3n$9c21db6bb8bcf2e0793e457f9cb960a4d149c4f97bc8c613f43d45ae14d60fdb"
+  },
+  "harshraj0856@gmail.com": {
+    "name": "Harsh",
+    "pw_hash": "pbkdf2:sha256:260000$MqEIt3eI17kCrkwB$1bfe6abf377740cb1c770f87303a5a468889e725a884c6589539898b75e30acd"
+  },
+  "harshraj@gmail.com": {
+    "name": "Krishna",
+    "pw_hash": "pbkdf2:sha256:260000$tr6JsUHrfDiofNHi$6231f7216be188745b9c3a55d7822523b494e00da94c386ce175f66222c766be"
+  }
+}

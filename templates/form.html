@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Create Resume — Resume Builder</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  <!-- Extra styling for Resume Title -->
+  <style>
+    .resume-title {
+      text-align: center;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+  </style>
+
+  <!-- jsPDF + html2canvas CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="form-page">
+  <nav class="nav">
+    <div class="brand"><h1>Resume Builder</h1></div>
+    <div class="nav-right">
+      <a href="{{ url_for('welcome') }}" class="btn ghost">Back</a>
+      <a href="{{ url_for('logout') }}" class="btn ghost">Logout</a>
+    </div>
+  </nav>
+
+  <main class="container grid-two">
+    <!-- LEFT column: key inputs -->
+    <section class="left-col form-section">
+      <h2>Personal Information</h2>
+
+      <div class="row">
+        <label>Name</label>
+        <input id="name" placeholder="Full name" />
+      </div>
+
+      <div class="row">
+        <label>Gmail Address</label>
+        <input id="email" placeholder="your@email.com" />
+      </div>
+
+      <div class="row">
+        <label>Contact</label>
+        <input id="contact" placeholder="+91-XXXXXXXXXX" />
+      </div>
+
+      <div class="row">
+        <label>Career Objective</label>
+        <textarea id="objective" rows="4" placeholder="Write your career objective..."></textarea>
+      </div>
+
+      <h3>Academic Profile</h3>
+      <table id="acad-table" class="table">
+        <thead>
+          <tr><th>Class</th><th>School/Board/University</th><th>Year</th><th>% / CGPA</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input class="tbl-in" value="10th"></td>
+            <td><input class="tbl-in" value=""></td>
+            <td><input class="tbl-in" value=""></td>
+            <td><input class="tbl-in" value=""></td>
+            <td><button class="btn tiny remove-row">-</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <button id="add-acad" class="btn small">+ Add Row</button>
+
+      <h3>Skills (Technical / Non-Technical)</h3>
+      <table id="skills-table" class="table">
+        <thead><tr><th>Skill</th><th>Proficiency</th><th>Certificate</th><th></th></tr></thead>
+        <tbody>
+          <tr>
+            <td><input class="tbl-in"></td>
+            <td><input class="tbl-in"></td>
+            <td><input class="tbl-in"></td>
+            <td><button class="btn tiny remove-row">-</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <button id="add-skill" class="btn small">+ Add Skill</button>
+
+      <h3>Projects</h3>
+      <div id="projects-wrap">
+        <div class="project-block">
+          <input class="proj-title" placeholder="Title of Project" />
+          <input class="proj-role" placeholder="Your role" />
+          <input class="proj-team" placeholder="Team Size" />
+          <textarea class="proj-desc" placeholder="Brief about project"></textarea>
+          <button class="btn tiny remove-block">Remove</button>
+        </div>
+      </div>
+      <button id="add-project" class="btn small">+ Add Project</button>
+
+      <h3>Training / Internship</h3>
+      <div id="train-wrap">
+        <div class="train-block">
+          <input class="train-title" placeholder="Title of Training/Internship" />
+          <input class="train-duration" placeholder="Duration" />
+          <input class="train-org" placeholder="Organization" />
+          <button class="btn tiny remove-block">Remove</button>
+        </div>
+      </div>
+      <button id="add-train" class="btn small">+ Add Training/Internship</button>
+
+      <h3>Extra-Curricular Activities</h3>
+      <ul id="ec-list" class="bullets"></ul>
+      <input id="ec-input" placeholder="Add activity and press Enter" />
+      
+      <h3>Seminar / Webinar / Workshop</h3>
+      <ul id="sw-list" class="bullets"></ul>
+      <input id="sw-input" placeholder="Add item and press Enter" />
+
+      <h3>Hobbies</h3>
+      <ul id="hobby-list" class="bullets"></ul>
+      <input id="hobby-input" placeholder="Add hobby and press Enter" />
+
+      <h3>Strengths</h3>
+      <ul id="strength-list" class="bullets"></ul>
+      <input id="strength-input" placeholder="Add strength and press Enter" />
+    </section>
+
+    <!-- RIGHT column: image and personal details, preview + controls -->
+    <aside class="right-col form-section">
+      <div class="image-card">
+        <label>Profile Image (top-right)</label>
+        <input type="file" id="profile-image" accept="image/*" />
+        <div id="image-preview" class="image-preview">No image</div>
+      </div>
+
+      <h3>Personal Details</h3>
+      <div class="row">
+        <label>Date of Birth</label>
+        <input id="dob" type="date" />
+      </div>
+      <div class="row">
+        <label>Gender</label>
+        <select id="gender">
+          <option value="">Select</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="row"><label>Father's Name</label><input id="father" /></div>
+      <div class="row"><label>Mother's Name</label><input id="mother" /></div>
+      <div class="row"><label>Nationality</label><input id="nationality" /></div>
+      <div class="row"><label>Marital Status</label><input id="marital" /></div>
+      <div class="row"><label>Permanent Address</label><textarea id="address" rows="3"></textarea></div>
+
+      <h3>Declaration</h3>
+      <textarea id="declaration" rows="4">I hereby declare that the information given above is true to the best of my knowledge and belief.</textarea>
+
+      <div class="row small">
+        <label>Place</label>
+        <input id="place" />
+        <label>Date</label>
+        <input id="sig-date" type="date" />
+      </div>
+
+      <div class="controls">
+        <button id="preview-btn" class="btn">Preview</button>
+        <button id="download-btn" class="btn primary">Download PDF</button>
+        <button id="save-btn" class="btn">Save to Dashboard</button>
+        <button id="share-btn" class="btn ghost">Share</button>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Hidden resume preview area (the actual resume layout for PDF) -->
+  <div id="resume-preview" class="pdf-layout hidden">
+
+     <!-- ***** RESUME TITLE ADDED HERE ***** -->
+     <h1 class="resume-title">RESUME</h1>
+
+    <div class="pdf-header">
+      <div class="pdf-left">
+        <h1 id="pv-name"></h1>
+        <p id="pv-contact"></p>
+        <p id="pv-email"></p>
+      </div>
+      <div class="pdf-image" id="pv-image"></div>
+    </div>
+    <hr/>
+    <section>
+      <h3>Career Objective</h3>
+      <p id="pv-objective"></p>
+    </section>
+
+    <section>
+      <h3>Academic Profile</h3>
+      <table id="pv-acad" class="pdf-table"></table>
+    </section>
+
+    <section>
+      <h3>Skills</h3>
+      <table id="pv-skills" class="pdf-table"></table>
+    </section>
+
+    <section>
+      <h3>Projects</h3>
+      <div id="pv-projects"></div>
+    </section>
+
+    <section>
+      <h3>Training / Internship</h3>
+      <div id="pv-trains"></div>
+    </section>
+
+    <section>
+      <h3>Extra-Curricular</h3>
+      <ul id="pv-ec"></ul>
+    </section>
+
+    <section>
+      <h3>Seminar / Webinar / Workshop</h3>
+      <ul id="pv-sw"></ul>
+    </section>
+
+    <section>
+      <h3>Personal Details</h3>
+      <table class="pdf-table">
+        <tr><td>DOB</td><td id="pv-dob"></td></tr>
+        <tr><td>Gender</td><td id="pv-gender"></td></tr>
+        <tr><td>Father</td><td id="pv-father"></td></tr>
+        <tr><td>Mother</td><td id="pv-mother"></td></tr>
+        <tr><td>Nationality</td><td id="pv-nation"></td></tr>
+        <tr><td>Marital Status</td><td id="pv-marital"></td></tr>
+        <tr><td>Address</td><td id="pv-address"></td></tr>
+      </table>
+    </section>
+
+    <section>
+      <h3>Hobbies</h3>
+      <ul id="pv-hobbies"></ul>
+    </section>
+
+    <section>
+      <h3>Strengths</h3>
+      <ul id="pv-strength"></ul>
+    </section>
+
+    <section>
+      <h3>Declaration</h3>
+      <p id="pv-decl"></p>
+      <div class="sig-line">
+        <div class="left">
+          <p>Place: <span id="pv-place"></span></p>
+          <p>Date: <span id="pv-date"></span></p>
+        </div>
+        <div class="right">
+          <p>__________________</p>
+          <p>Signature</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+<script src="{{ url_for('static', filename='js/resume.js') }}"></script>
+</body>
+</html>

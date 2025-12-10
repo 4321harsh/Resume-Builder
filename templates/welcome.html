@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang ="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Welcome — Resume Builder</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="welcome-page">
+  <nav class="nav">
+    <div class="brand"><h1>Resume Builder</h1></div>
+    <div class="nav-right">
+      <span>{{ user }}</span>
+      <a href="{{ url_for('form_page') }}" class="btn">Create New Resume</a>
+      <a href="{{ url_for('logout') }}" class="btn ghost">Logout</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h2>Your saved resumes</h2>
+    {% if files %}
+      <ul class="resume-list">
+        {% for f in files %}
+          <li>
+            <a href="{{ url_for('serve_resume', user=user, filename=f) }}" target="_blank">{{ f }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No resumes yet. Click <strong>Create New Resume</strong> to start.</p>
+    {% endif %}
+  </main>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Resume Builder — Login / Register</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="auth-page">
+  <div class="card auth-card">
+    <h1 class="logo">Resume Builder</h1>
+
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <div class="tabs">
+      <button id="show-login" class="tab active">Login</button>
+      <button id="show-register" class="tab">Register</button>
+    </div>
+
+    <form id="login-form" action="{{ url_for('login') }}" method="post" class="auth-form">
+      <input name="email" type="email" placeholder="Email" required />
+      <input name="password" type="password" placeholder="Password" required />
+      <button type="submit" class="btn">Login</button>
+    </form>
+
+    <form id="register-form" action="{{ url_for('register') }}" method="post" class="auth-form hidden">
+      <input name="name" type="text" placeholder="Full Name" required />
+      <input name="email" type="email" placeholder="Email" required />
+      <input name="password" type="password" placeholder="Password" required />
+      <button type="submit" class="btn">Create account</button>
+    </form>
+
+  </div>
+
+<script>
+document.getElementById('show-login').onclick = () => {
+  document.getElementById('login-form').classList.remove('hidden');
+  document.getElementById('register-form').classList.add('hidden');
+  document.getElementById('show-login').classList.add('active');
+  document.getElementById('show-register').classList.remove('active');
+}
+document.getElementById('show-register').onclick = () => {
+  document.getElementById('login-form').classList.add('hidden');
+  document.getElementById('register-form').classList.remove('hidden');
+  document.getElementById('show-login').classList.remove('active');
+  document.getElementById('show-register').classList.add('active');
+}
+</script>
+</body>
+</html>
