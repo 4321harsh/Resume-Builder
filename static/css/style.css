@@ -253,3 +253,22 @@
     margin-bottom: 20px;
     letter-spacing: 2px;
 }
+
+
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.pdf-table th,
+.pdf-table td {
+  border: 1px solid #444;
+  padding: 6px 8px;
+  font-size: 13px;
+}
+
+.pdf-table th {
+  background: #f2f2f2;
+  font-weight: 600;
+}
