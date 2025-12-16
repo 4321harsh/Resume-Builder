@@ -103,29 +103,74 @@ function populatePreview(){
   document.getElementById('pv-contact').textContent = document.getElementById('contact').value || '';
   document.getElementById('pv-objective').textContent = document.getElementById('objective').value || '';
 
-  // academic
-  const acadT = document.getElementById('pv-acad');
-  acadT.innerHTML = '';
-  $$('#acad-table tbody tr').forEach(tr=>{
-    const cells = Array.from(tr.querySelectorAll('input')).map(i=>i.value);
-    if(cells.some(c=>c.trim())) {
-      const row = document.createElement('tr');
-      row.innerHTML = `<td>${cells[0]||''}</td><td>${cells[1]||''}</td><td>${cells[2]||''}</td><td>${cells[3]||''}</td>`;
-      acadT.appendChild(row);
-    }
-  });
+// Academic
+const acadT = document.getElementById('pv-acad');
+acadT.innerHTML = '';
 
-  // skills
-  const skillsT = document.getElementById('pv-skills');
-  skillsT.innerHTML = '';
-  $$('#skills-table tbody tr').forEach(tr=>{
-    const cells = Array.from(tr.querySelectorAll('input')).map(i=>i.value);
-    if(cells.some(c=>c.trim())){
-      const row = document.createElement('tr');
-      row.innerHTML = `<td>${cells[0]||''}</td><td>${cells[1]||''}</td><td>${cells[2]||''}</td>`;
-      skillsT.appendChild(row);
-    }
-  });
+// ---- TABLE HEADER ----
+const thead = document.createElement('thead');
+thead.innerHTML = `
+  <tr>
+    <th>Class</th>
+    <th>School / Board / University</th>
+    <th>Year</th>
+    <th>% / CGPA</th>
+  </tr>
+`;
+acadT.appendChild(thead);
+
+// ---- TABLE BODY ----
+const tbody = document.createElement('tbody');
+
+$$('#acad-table tbody tr').forEach(tr => {
+  const cells = Array.from(tr.querySelectorAll('input')).map(i => i.value.trim());
+
+  if (cells.some(c => c !== '')) {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${cells[0] || ''}</td>
+      <td>${cells[1] || ''}</td>
+      <td>${cells[2] || ''}</td>
+      <td>${cells[3] || ''}</td>
+    `;
+    tbody.appendChild(row);
+  }
+});
+acadT.appendChild(tbody);
+
+
+// Skills
+const skillsT = document.getElementById('pv-skills');
+skillsT.innerHTML = '';
+
+// ---- TABLE HEADER ----
+const sThead = document.createElement('thead');
+sThead.innerHTML = `
+  <tr>
+    <th>Skill</th>
+    <th>Proficiency</th>
+    <th>Certificate</th>
+  </tr>
+`;
+skillsT.appendChild(sThead);
+
+// ---- TABLE BODY ----
+const sTbody = document.createElement('tbody');
+
+$$('#skills-table tbody tr').forEach(tr => {
+  const cells = Array.from(tr.querySelectorAll('input')).map(i => i.value.trim());
+
+  if (cells.some(c => c !== '')) {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${cells[0] || ''}</td>
+      <td>${cells[1] || ''}</td>
+      <td>${cells[2] || ''}</td>
+    `;
+    sTbody.appendChild(row);
+  }
+});
+skillsT.appendChild(sTbody);
 
   // projects
   const pvProjects = document.getElementById('pv-projects');
@@ -155,14 +200,14 @@ function populatePreview(){
     }
   });
 
-  // lists
-  function copyList(srcId, destId){
-    const dest = document.getElementById(destId); dest.innerHTML='';
-    document.querySelectorAll(`#${srcId} li`).forEach(li=>{
-      const item = document.createElement('li'); item.textContent = li.textContent; dest.appendChild(item);
-    });
-  }
-  copyList('ec-list','pv-ec'); copyList('sw-list','pv-sw'); copyList('hobby-list','pv-hobbies'); copyList('strength-list','pv-strength');
+ // lists
+function copyList(srcId, destId){
+  const dest = document.getElementById(destId); dest.innerHTML='';
+  document.querySelectorAll(`#${srcId} li`).forEach(li=>{
+    const item = document.createElement('li'); item.textContent = li.textContent; dest.appendChild(item);
+  });
+}
+copyList('ec-list','pv-ec'); copyList('sw-list','pv-sw'); copyList('hobby-list','pv-hobbies'); copyList('strength-list','pv-strength');
 
   // personal details
   document.getElementById('pv-dob').textContent = document.getElementById('dob').value || '';
